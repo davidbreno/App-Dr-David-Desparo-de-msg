@@ -290,7 +290,7 @@ export default function App() {
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="w-72 flex-shrink-0"
+            className="w-72 shrink-0"
           >
             <motion.nav 
               className="sticky top-28 backdrop-blur-2xl bg-white/5 rounded-3xl p-6 border border-white/10"
