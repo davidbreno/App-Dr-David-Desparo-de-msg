@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useMemo, useEffect } from 'react';
-import { Search, Send, Users, Sparkles, LogOut, BarChart3, Settings as SettingsIcon, MessageSquare, CheckSquare, MessageCircle, Zap } from 'lucide-react';
+import { Search, Send, Users, Sparkles, LogOut, BarChart3, Settings as SettingsIcon, MessageSquare, CheckSquare, MessageCircle, Zap, X, Upload } from 'lucide-react';
 import { PatientCard } from './components/PatientCard';
 import { MessageComposer } from './components/MessageComposer';
 import { AgeSlider } from './components/AgeSlider';
@@ -72,7 +72,7 @@ export default function App() {
   const [ageRange, setAgeRange] = useState<[number, number]>([18, 80]);
   const [selectedPatients, setSelectedPatients] = useState<Set<string>>(new Set());
   const [message, setMessage] = useState('');
-  const [currentView, setCurrentView] = useState<'messages' | 'dashboard' | 'selected' | 'all' | 'sent' | 'responses' | 'settings'>('messages');
+  const [currentView, setCurrentView] = useState<'messages' | 'dashboard' | 'selected' | 'all' | 'sent' | 'responses' | 'settings' | 'import'>('messages');
   const [sentMessages] = useState(0);
   const [responses] = useState(0);
   const [ghostPatients, setGhostPatients] = useState<Set<string>>(new Set());
@@ -248,7 +248,6 @@ export default function App() {
             </motion.div>
             
             <div className="flex items-center gap-4">
-              <ImportPatients onImport={handleImport} />
               <motion.button
                 onClick={handleDeleteAllPatients}
                 className="flex items-center gap-2 px-4 py-2 text-white rounded-xl transition-all bg-red-600 hover:bg-red-700 border border-red-700"
@@ -256,7 +255,7 @@ export default function App() {
                 whileTap={{ scale: 0.95 }}
               >
                 <X className="w-4 h-4" />
-                Apagar todos os pacientes
+                Apagar Todos
               </motion.button>
               <motion.div 
                 className="text-right px-4 py-2 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10"
@@ -305,6 +304,7 @@ export default function App() {
                   { id: 'all', icon: Users, label: 'Todos Pacientes', badge: patients.length },
                   { id: 'selected', icon: CheckSquare, label: 'Selecionados', badge: selectedPatients.size || undefined },
                   { id: 'messages', icon: MessageSquare, label: 'Enviar Mensagens' },
+                  { id: 'import', icon: Upload, label: 'Importar Pacientes' },
                   { id: 'sent', icon: Send, label: 'Enviadas', badge: sentMessages },
                   { id: 'responses', icon: MessageCircle, label: 'Respostas', badge: responses },
                   { id: 'settings', icon: SettingsIcon, label: 'Configurações' },
@@ -570,6 +570,12 @@ export default function App() {
                       )}
                     </div>
 
+                  </div>
+                )}
+
+                {currentView === 'import' && (
+                  <div className="space-y-6">
+                    <ImportPatients onImport={handleImport} />
                   </div>
                 )}
 

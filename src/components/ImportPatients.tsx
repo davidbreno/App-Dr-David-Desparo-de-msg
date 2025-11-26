@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Upload, FileText, X, CheckCircle, AlertCircle, File } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import type { Patient } from '../App';
 
 interface ImportPatientsProps {
@@ -7,12 +7,10 @@ interface ImportPatientsProps {
 }
 
 export function ImportPatients({ onImport }: ImportPatientsProps) {
-  const [isOpen, setIsOpen] = useState(false);
   const [htmlInput, setHtmlInput] = useState('');
   const [previewPatients, setPreviewPatients] = useState<Patient[]>([]);
   const [error, setError] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [fileName, setFileName] = useState('');
 
   const parseHTML = (html: string): Patient[] => {
     try {
@@ -248,8 +246,6 @@ export function ImportPatients({ onImport }: ImportPatientsProps) {
       onImport(previewPatients);
       setHtmlInput('');
       setPreviewPatients([]);
-      setFileName('');
-      setIsOpen(false);
     }
   };
 
@@ -257,37 +253,13 @@ export function ImportPatients({ onImport }: ImportPatientsProps) {
     setHtmlInput('');
     setPreviewPatients([]);
     setError('');
-    setFileName('');
-    setIsOpen(false);
   };
 
-  if (!isOpen) {
-    return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 px-4 py-2 text-black rounded-xl transition-all"
-        style={{
-          background: 'linear-gradient(90deg, #C8FF2E 0%, #78A82F 100%)',
-          boxShadow: '0 4px 15px rgba(200, 255, 46, 0.2)',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.boxShadow = '0 8px 25px rgba(200, 255, 46, 0.4)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.boxShadow = '0 4px 15px rgba(200, 255, 46, 0.2)';
-        }}
-      >
-        <Upload className="w-4 h-4" />
-        Importar Pacientes
-      </button>
-    );
-  }
-
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#1A2332] rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col border border-[#2A3441]">
+    <div className="space-y-6">
+      <div className="bg-[#1A2332] rounded-2xl shadow-2xl w-full flex flex-col border border-[#2A3441] p-6">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[#2A3441]">
+        <div className="flex items-center justify-between mb-6 border-b border-[#2A3441] pb-4">
           <div className="flex items-center gap-3">
             <div 
               className="w-10 h-10 rounded-xl flex items-center justify-center"
@@ -303,76 +275,19 @@ export function ImportPatients({ onImport }: ImportPatientsProps) {
               <p className="text-sm text-gray-400">
                 {previewPatients.length > 0 
                   ? `${previewPatients.length.toLocaleString('pt-BR')} pacientes encontrados`
-                  : 'Upload de arquivo ou cole os dados'}
+                  : 'Cole ou faça upload dos dados'}
               </p>
             </div>
           </div>
-          <button
-            onClick={handleCancel}
-            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#2A3441] transition-colors"
-          >
-            <X className="w-5 h-5 text-gray-400" />
-          </button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          {/* File Upload */}
-          <div 
-            className="bg-[#0F1419] border-2 border-dashed rounded-xl p-8"
-            style={{
-              borderColor: 'rgba(200, 255, 46, 0.3)',
-            }}
-          >
-            <div className="text-center space-y-4">
-              <div 
-                className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto"
-                style={{
-                  background: 'linear-gradient(135deg, #C8FF2E 0%, #78A82F 100%)',
-                  boxShadow: '0 4px 15px rgba(200, 255, 46, 0.2)',
-                }}
-              >
-                <File className="w-8 h-8 text-black" />
-              </div>
-              <div>
-                <h3 className="text-white mb-1">Escolha um arquivo</h3>
-                <p className="text-sm text-gray-400">
-                  Suporta HTML, CSV, JSON (até 5000+ pacientes)
-                </p>
-              </div>
-              <label 
-                className="inline-block px-6 py-3 text-black rounded-xl transition-all cursor-pointer"
-                style={{
-                  background: 'linear-gradient(90deg, #C8FF2E 0%, #78A82F 100%)',
-                  boxShadow: '0 4px 15px rgba(200, 255, 46, 0.2)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(200, 255, 46, 0.4)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(200, 255, 46, 0.2)';
-                }}
-              >
-                <input
-                  type="file"
-                  accept=".html,.htm,.csv,.json"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-                Selecionar Arquivo
-              </label>
-              {fileName && (
-                <p className="text-sm" style={{ color: '#C8FF2E' }}>
-                  📄 {fileName}
-                </p>
-              )}
-            </div>
-          </div>
-
+        <div className="space-y-6">
+          
           {/* Instructions */}
-          <div className="bg-[#0F1419] border border-[#2A3441] rounded-xl p-4">
-            <h3 className="text-white mb-2">Formatos aceitos:</h3>
-            <ul className="space-y-1 text-sm text-gray-400">
+          <div className="bg-[#0F1419] border border-[#2A3441] rounded-xl p-3">
+            <h3 className="text-white text-sm mb-2">Formatos aceitos:</h3>
+            <ul className="space-y-1 text-xs text-gray-400">
               <li>• <strong style={{ color: '#C8FF2E' }}>HTML:</strong> Tabelas ou listas com Nome, Idade, Telefone, Data</li>
               <li>• <strong style={{ color: '#C8FF2E' }}>CSV:</strong> Nome, Idade, Telefone, Última Visita (separado por vírgula ou ponto-e-vírgula)</li>
               <li>• <strong style={{ color: '#C8FF2E' }}>JSON:</strong> Array de objetos com campos name/nome, age/idade, phone/telefone</li>
@@ -381,13 +296,13 @@ export function ImportPatients({ onImport }: ImportPatientsProps) {
 
           {/* Manual Input */}
           <div>
-            <label className="block mb-2 text-white">Ou cole os dados aqui:</label>
+            <label className="block mb-2 text-white text-sm">Ou cole os dados aqui:</label>
             <textarea
               value={htmlInput}
               onChange={(e) => setHtmlInput(e.target.value)}
               placeholder={`HTML, CSV ou JSON...\n\nExemplo CSV:\nAna Silva,34,11987654321,2024-11-20\nCarlos Mendes,45,11976543210,2024-11-15`}
-              rows={8}
-              className="w-full px-4 py-3 bg-[#0F1419] border border-[#2A3441] rounded-xl focus:outline-none focus:border-transparent transition-all resize-none font-mono text-sm text-white placeholder-gray-500"
+              rows={4}
+              className="w-full px-4 py-3 bg-[#0F1419] border border-[#2A3441] rounded-xl focus:outline-none focus:border-transparent transition-all resize-none font-mono text-sm text-white placeholder-gray-500 max-h-24"
               style={{
                 outlineColor: '#C8FF2E',
               }}
@@ -404,11 +319,10 @@ export function ImportPatients({ onImport }: ImportPatientsProps) {
           </div>
 
           {/* Preview Button */}
-          {!fileName && (
-            <button
-              onClick={handlePreview}
-              disabled={!htmlInput.trim() || isProcessing}
-              className="w-full py-3 text-black rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          <button
+            onClick={handlePreview}
+            disabled={!htmlInput.trim() || isProcessing}
+            className="w-full py-3 text-black rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
                 background: !htmlInput.trim() || isProcessing
                   ? 'rgba(100, 100, 100, 0.3)'
@@ -430,7 +344,6 @@ export function ImportPatients({ onImport }: ImportPatientsProps) {
             >
               {isProcessing ? 'Processando...' : 'Visualizar Importação'}
             </button>
-          )}
 
           {/* Processing Indicator */}
           {isProcessing && (
