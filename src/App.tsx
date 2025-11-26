@@ -1,5 +1,5 @@
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { Search, Send, Users, Sparkles, LogOut, BarChart3, Settings as SettingsIcon, MessageSquare, CheckSquare, MessageCircle, Zap } from 'lucide-react';
 import { PatientCard } from './components/PatientCard';
 import { MessageComposer } from './components/MessageComposer';
