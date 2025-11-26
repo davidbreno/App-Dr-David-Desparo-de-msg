@@ -61,6 +61,11 @@ const FloatingParticles = () => {
 
 export default function App() {
   const [patients, setPatients] = useState<Patient[]>(mockPatients);
+    // Função para apagar todos os pacientes
+    const handleDeleteAllPatients = () => {
+      setPatients([]);
+      clearSelection();
+    };
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -244,6 +249,15 @@ export default function App() {
             
             <div className="flex items-center gap-4">
               <ImportPatients onImport={handleImport} />
+              <motion.button
+                onClick={handleDeleteAllPatients}
+                className="flex items-center gap-2 px-4 py-2 text-white rounded-xl transition-all bg-red-600 hover:bg-red-700 border border-red-700"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <X className="w-4 h-4" />
+                Apagar todos os pacientes
+              </motion.button>
               <motion.div 
                 className="text-right px-4 py-2 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10"
                 whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.08)' }}

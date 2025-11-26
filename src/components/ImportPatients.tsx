@@ -27,24 +27,26 @@ export function ImportPatients({ onImport }: ImportPatientsProps) {
       
       if (rows.length > 0) {
         rows.forEach((row, index) => {
-          const cells = row.querySelectorAll('td, th');
-          if (cells.length >= 3) {
-            const name = cells[0]?.textContent?.trim() || '';
-            const ageText = cells[1]?.textContent?.trim() || '0';
-            const phone = cells[2]?.textContent?.trim().replace(/\D/g, '') || '';
-            const lastVisit = cells[3]?.textContent?.trim() || new Date().toISOString().split('T')[0];
+            const cells = row.querySelectorAll('td, th');
+            if (cells.length >= 5) {
+              const name = cells[0]?.textContent?.trim() || '';
+              // CPF: cells[1]
+              const phone = cells[2]?.textContent?.trim().replace(/\D/g, '') || '';
+              // Nascimento: cells[3]
+              const ageText = cells[4]?.textContent?.trim() || '0';
+              const lastVisit = cells[3]?.textContent?.trim() || new Date().toISOString().split('T')[0];
 
-            // Pular linhas de cabeçalho
-            if (name && phone && !name.toLowerCase().includes('nome') && !name.toLowerCase().includes('paciente')) {
-              patients.push({
-                id: `imported-${Date.now()}-${index}`,
-                name,
-                age: parseInt(ageText) || 0,
-                phone: phone.startsWith('55') ? phone : `55${phone}`,
-                lastVisit,
-              });
+              // Pular linhas de cabeçalho
+              if (name && phone && !name.toLowerCase().includes('nome') && !name.toLowerCase().includes('paciente')) {
+                patients.push({
+                  id: `imported-${Date.now()}-${index}`,
+                  name,
+                  age: parseInt(ageText) || 0,
+                  phone: phone.startsWith('55') ? phone : `55${phone}`,
+                  lastVisit,
+                });
+              }
             }
-          }
         });
       } else {
         // Formato 2: Lista (ul/ol)
